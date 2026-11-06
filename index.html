@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kecocokan Jodoh Nama Pasangan, Numerologi Cinta</title>
+<style>
+:root{--bg:#fdf6f7;--card:#fff;--text:#2b2024;--muted:#6f5f65;--accent:#c2185b;--accent2:#fce4ec;--line:#ecd5db;--pos:#2e7d32;--neg:#c62828;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1417;--card:#261c20;--text:#f3e6ea;--muted:#b9a5ac;--accent:#f06292;--accent2:#3a2430;--line:#43323a;--pos:#81c784;--neg:#ef9a9a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1b1417;--card:#261c20;--text:#f3e6ea;--muted:#b9a5ac;--accent:#f06292;--accent2:#3a2430;--line:#43323a;--pos:#81c784;--neg:#ef9a9a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6}
+.wrap{max-width:720px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.5rem;text-align:center;color:var(--accent);margin:8px 0 4px;letter-spacing:.5px}
+.sub{text-align:center;color:var(--muted);margin:0 0 20px;font-size:.95rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+label{display:block;font-weight:600;margin:0 0 6px}
+input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text);font-size:1rem;margin-bottom:14px}
+input:focus{outline:2px solid var(--accent);border-color:transparent}
+button{width:100%;padding:13px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:1rem;font-weight:700;cursor:pointer}
+.err{color:var(--neg);margin:10px 0 0;min-height:1.2em;font-size:.9rem}
+.nums{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;text-align:center}
+.nb{background:var(--accent2);border-radius:12px;padding:12px 18px;min-width:120px}
+.nb b{display:block;font-size:2rem;color:var(--accent);line-height:1.1}
+.nb span{font-size:.85rem;color:var(--muted);word-break:break-word}
+.heart{font-size:1.6rem}
+.score{margin:16px 0 4px;text-align:center}
+.bar{height:12px;background:var(--accent2);border-radius:8px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .6s}
+h2{font-size:1.1rem;margin:0 0 8px}
+.pos h2{color:var(--pos)}.neg h2{color:var(--neg)}
+.hit{display:none}
+.hit.show{display:block}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left}
+th{background:var(--accent2)}
+.scroll{overflow-x:auto}
+.note{color:var(--muted);font-size:.85rem}
+.theme{position:fixed;top:calc(env(safe-area-inset-top,0px) + 8px);right:10px;width:auto;padding:6px 10px;font-size:.8rem;background:var(--card);color:var(--text);border:1px solid var(--line);z-index:5}
+</style>
+</head>
+<body>
+<button class="theme" id="tg" type="button" aria-label="Ganti tema">Tema</button>
+<div class="wrap">
+<h1>KECOCOKAN JODOH NAMA PASANGAN</h1>
+<p class="sub">Numerologi cinta: cek kecocokan lewat angka di balik nama</p>
+
+<div class="card">
+<label for="n1">Nama Anda</label>
+<input id="n1" type="text" placeholder="Contoh: Joko" autocomplete="off">
+<label for="n2">Nama Pasangan</label>
+<input id="n2" type="text" placeholder="Contoh: Rina" autocomplete="off">
+<button id="go" type="button">Hitung Kecocokan</button>
+<p class="err" id="err"></p>
+</div>
+
+<div class="hit" id="hasil">
+<div class="card">
+<div class="nums">
+<div class="nb"><b id="a1">-</b><span id="l1"></span></div>
+<div class="heart">❤</div>
+<div class="nb"><b id="a2">-</b><span id="l2"></span></div>
+</div>
+<div class="score"><b id="sc"></b><div class="bar"><i id="sb"></i></div></div>
+</div>
+<div class="card pos"><h2>Sisi Positif Anda</h2><p id="pos"></p></div>
+<div class="card neg"><h2>Sisi Negatif Anda</h2><p id="neg"></p></div>
+<div class="card"><h2>Gambaran Hubungan</h2><p id="rel"></p><h2>Saran</h2><p id="sar"></p></div>
+</div>
+
+</div>
+
+<script>
+var MAP={};
+"AJS".split("").forEach(function(c){MAP[c]=1});"BKT".split("").forEach(function(c){MAP[c]=2});
+"CLU".split("").forEach(function(c){MAP[c]=3});"DMV".split("").forEach(function(c){MAP[c]=4});
+"ENW".split("").forEach(function(c){MAP[c]=5});"FOX".split("").forEach(function(c){MAP[c]=6});
+"GPY".split("").forEach(function(c){MAP[c]=7});"HQZ".split("").forEach(function(c){MAP[c]=8});
+"IR".split("").forEach(function(c){MAP[c]=9});
+
+var D={
+1:{p:"Mandiri, berani, dan penuh inisiatif. Anda tidak menunggu keadaan, melainkan menciptakannya, dan pasangan merasa terlindungi oleh keteguhan Anda.",n:"Keras kepala dan sulit mengalah. Anda bisa terdengar memerintah saat sedang yakin benar.",c:"mencintai dengan tindakan nyata dan ingin dihormati",s:"belajar bertanya “bagaimana menurutmu?” sebelum memutuskan"},
+2:{p:"Lembut, peka, dan pendengar yang setia. Anda mudah merasakan suasana hati pasangan dan pandai menenangkan.",n:"Ragu-ragu dan terlalu bergantung pada pasangan. Anda sering memendam keluhan agar suasana tetap damai.",c:"mencintai dengan perhatian halus dan butuh kepastian",s:"ungkapkan keinginan sejak awal, jangan menunggu ditebak"},
+3:{p:"Ceria, hangat, dan pandai berkomunikasi. Anda membuat hubungan terasa ringan dan penuh tawa.",n:"Suasana hati mudah berubah dan cenderung menghindari topik berat dengan bercanda.",c:"mencintai dengan kata-kata, humor, dan kejutan kecil",s:"sisihkan waktu untuk obrolan serius sebelum masalah menumpuk"},
+4:{p:"Stabil, jujur, dan bertanggung jawab. Pasangan tahu bahwa janji Anda bisa dipegang.",n:"Kaku dan sulit menerima perubahan. Rutinitas bisa terasa membosankan bagi pasangan.",c:"mencintai dengan kesetiaan dan kerja keras",s:"sesekali ubah rutinitas dan tunjukkan sayang lewat kata, bukan hanya tindakan"},
+5:{p:"Dinamis, penasaran, dan menyenangkan. Hubungan bersama Anda jarang membosankan.",n:"Cepat bosan dan takut terikat. Pasangan bisa merasa kurang diprioritaskan.",c:"mencintai dengan petualangan dan kebebasan",s:"beri kepastian soal komitmen dan rencanakan hal baru bersama"},
+6:{p:"Penuh kasih dan peduli keluarga. Anda menjadikan rumah tempat yang nyaman untuk pulang.",n:"Suka mengatur dan menuntut kesempurnaan, sehingga pasangan bisa merasa diawasi.",c:"mencintai dengan merawat dan melayani",s:"terima cara pasangan yang berbeda dan hargai usahanya, bukan hanya hasilnya"},
+7:{p:"Mendalam, bijak, dan setia pada pikirannya. Anda pendengar yang matang dan tidak mudah goyah.",n:"Tertutup dan menarik diri saat tertekan, membuat pasangan merasa dijauhi.",c:"mencintai dengan kesetiaan yang tenang dan butuh ruang sendiri",s:"katakan “aku butuh waktu” agar pasangan tidak salah paham, lalu kembali bercerita"},
+8:{p:"Tegas, ambisius, dan melindungi. Anda mampu membangun keamanan bagi masa depan bersama.",n:"Dominan dan terlalu fokus pada karier atau materi hingga waktu berdua tersisih.",c:"mencintai dengan tanggung jawab dan menyediakan kebutuhan",s:"jadwalkan waktu berkualitas yang tidak boleh diganggu pekerjaan"},
+9:{p:"Murah hati, pengertian, dan berwawasan luas. Anda mudah memaafkan dan memberi tanpa hitung-hitungan.",n:"Mudah kecewa dan sulit melepas masa lalu. Anda bisa memberi terlalu banyak lalu merasa tidak dihargai.",c:"mencintai dengan ketulusan dan pengorbanan",s:"sampaikan kebutuhan sendiri dan tutup masalah lama dengan jelas"},
+11:{p:"Intuitif, empatik, dan punya ikatan batin yang kuat. Anda sering merasakan sesuatu sebelum diucapkan.",n:"Tegang, overthinking, dan terlalu sensitif terhadap perubahan sikap kecil.",c:"mencintai dengan intuisi dan kedalaman perasaan",s:"cek dugaan dengan bertanya langsung, jangan memutuskan dari firasat saja"},
+22:{p:"Visioner, tekun, dan ahli membangun jangka panjang. Anda mampu mewujudkan rencana besar bersama pasangan.",n:"Menekan diri dan pasangan dengan target yang terlalu tinggi.",c:"mencintai dengan membangun masa depan konkret",s:"rayakan pencapaian kecil dan beri ruang untuk istirahat"}
+};
+
+var M=[
+[0,0,0,0,0,0,0,0,0,0],
+[0,75,60,85,50,90,60,70,65,80],
+[0,60,80,65,90,45,90,70,75,70],
+[0,85,65,80,45,85,75,50,55,95],
+[0,50,90,45,80,40,75,70,90,55],
+[0,90,45,85,40,70,50,80,60,65],
+[0,60,90,75,75,50,85,55,70,90],
+[0,70,70,50,70,80,55,80,50,60],
+[0,65,75,55,90,60,70,50,75,65],
+[0,80,70,95,55,65,90,60,65,80]];
+
+function reduce(n){while(n>9&&n!==11&&n!==22){n=String(n).split("").reduce(function(a,b){return a+ +b},0)}return n}
+function angka(nama){var t=0,s=nama.toUpperCase().replace(/[^A-Z]/g,"");for(var i=0;i<s.length;i++)t+=MAP[s[i]]||0;return s.length?reduce(t):0}
+function base(n){return n===11?2:n===22?4:n}
+function el(i){return document.getElementById(i)}
+
+function tier(sk){
+if(sk>=85)return"Kombinasi yang sangat selaras. Karakter kalian saling melengkapi dan mudah menemukan irama yang sama.";
+if(sk>=70)return"Kombinasi yang cukup cocok. Ada banyak titik temu, dengan beberapa perbedaan kecil yang perlu dikelola bersama.";
+if(sk>=55)return"Kombinasi yang butuh penyesuaian. Perbedaan kalian nyata, tetapi bisa menjadi pelajaran bila dihadapi dengan sabar.";
+return"Kombinasi yang penuh tantangan. Cara kalian memandang hidup cukup berlawanan, sehingga komunikasi jujur menjadi kunci.";
+}
+
+function hitung(){
+var a=el("n1").value.trim(),b=el("n2").value.trim();
+if(!/[A-Za-z]/.test(a)||!/[A-Za-z]/.test(b)){el("err").textContent="Isi nama Anda dan nama pasangan (huruf A-Z).";el("hasil").classList.remove("show");return}
+el("err").textContent="";
+var x=angka(a),y=angka(b),sk=M[base(x)][base(y)];
+if(x===11||x===22||y===11||y===22)sk=Math.min(100,sk+3);
+el("a1").textContent=x;el("a2").textContent=y;
+el("l1").textContent=a;el("l2").textContent=b;
+el("sc").textContent="Tingkat kecocokan: "+sk+"%";
+el("sb").style.width=sk+"%";
+el("pos").textContent=D[x].p;
+el("neg").textContent=D[x].n;
+var rel="Anda (angka "+x+") "+D[x].c+", sedangkan pasangan (angka "+y+") "+D[y].c+". "+tier(sk);
+if(x===y)rel+=" Karena angka kalian sama, kalian saling memahami dengan cepat, tetapi kelemahan yang sama juga bisa saling menguatkan.";
+el("rel").textContent=rel;
+el("sar").textContent="Untuk Anda: "+D[x].s+". Untuk pasangan: "+D[y].s+". Baca hasil ini bersama dan jadikan bahan obrolan, bukan penentu keputusan.";
+el("hasil").classList.add("show");
+el("hasil").scrollIntoView({behavior:"smooth"});
+}
+el("go").addEventListener("click",hitung);
+["n1","n2"].forEach(function(i){el(i).addEventListener("keydown",function(e){if(e.key==="Enter")hitung()})});
+el("tg").addEventListener("click",function(){
+var r=document.documentElement,dark=r.getAttribute("data-theme")==="dark"||(!r.getAttribute("data-theme")&&matchMedia("(prefers-color-scheme:dark)").matches);
+r.setAttribute("data-theme",dark?"light":"dark");
+});
+</script>
+</body>
+</html>
